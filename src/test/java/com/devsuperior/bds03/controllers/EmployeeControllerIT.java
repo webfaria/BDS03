@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.bds03.dto.EmployeeDTO;
@@ -20,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
+@Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class EmployeeControllerIT {
 
 	@Autowired
@@ -28,7 +29,6 @@ public class EmployeeControllerIT {
 	
 	@Autowired
 	private ObjectMapper objectMapper;
-	
 	@Autowired
 	private TokenUtil tokenUtil;
 	
@@ -125,7 +125,7 @@ public class EmployeeControllerIT {
 	public void insertShouldReturn422WhenAdminLoggedAndInvalidEmail() throws Exception {
 
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
-
+		
 		EmployeeDTO dto = new EmployeeDTO(null, "Joaquim", "joaquim@", 1L);
 		String jsonBody = objectMapper.writeValueAsString(dto);
 		
@@ -140,7 +140,7 @@ public class EmployeeControllerIT {
 		result.andExpect(jsonPath("$.errors[0].fieldName").value("email"));
 		result.andExpect(jsonPath("$.errors[0].message").value("Email inválido"));
 	}
-
+	
 	@Test
 	public void insertShouldReturn422WhenAdminLoggedAndNullDepartment() throws Exception {
 

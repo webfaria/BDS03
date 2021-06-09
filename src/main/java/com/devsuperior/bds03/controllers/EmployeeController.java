@@ -26,19 +26,18 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService service;
-	
+
 	@GetMapping
 	public ResponseEntity<Page<EmployeeDTO>> findAll(Pageable pageable) {
 		PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("name"));
-		Page<EmployeeDTO> list = service.findAll(pageRequest);		
+		Page<EmployeeDTO> list = service.findAll(pageRequest);
 		return ResponseEntity.ok().body(list);
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<EmployeeDTO> insert(@RequestBody EmployeeDTO dto) {
+	public ResponseEntity<EmployeeDTO> insert(@Valid @RequestBody EmployeeDTO dto) {
 		dto = service.insert(dto);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(dto.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
 		return ResponseEntity.created(uri).body(dto);
 	}
 }
