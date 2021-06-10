@@ -16,7 +16,7 @@ public class EmployeeDTO implements Serializable {
 	@NotBlank(message = "Campo requerido")
 	private String name;
 	
-	@Email(message = "Email invalido")
+	@Email(message = "Email inválido")
 	private String email;
 	
 	@NotNull(message = "Campo requerido")
